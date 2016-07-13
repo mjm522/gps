@@ -1,0 +1,172 @@
+Installing gps on Mac OSX; Tested on  El-Capitan and Mavericks
+
+Versions of various dependencies the library has worked for me:
+
+Python-2.7.10
+Box2D -2.3.1
+Mujoco -1.31
+Cmake-3.6.0
+matplotlib -1.5.1
+mercurial -3.8.4
+numpy -1.11.1
+protobuf –2.6.1
+pygame -1.9.2.dev1
+PySide -1.2.4
+sdl – 1.2.15
+qt – 4.8.7_2
+open scene graph – 3.4.0_1
+
+For installing gps without virtual environment
+
+Step 1:
+
+$brew install protobuf
+$git clone https://github.com/cbfinn/gps.git
+$cd gps
+$./compile_proto.sh
+ 
+
+Optional Step 2:  Integrating with box2d
+
+For installing box2d
+
+$brew install swig
+$git clone https://github.com/pybox2d/pybox2d pybox2d_dev
+$cd pybox2d_dev
+$python setup.py build 
+$sudo python setup.py install
+Note: you could run pip install git+https://github.com/pybox2d/pybox2d.git, but it threw error for me explained in the possible errors section. In that case install the pybox2d_dev as said above.
+
+For installing pygame
+
+$brew install qt
+$brew install pyside
+$brew install mercurial
+$brew install sdl
+$pip install hg+https://bitbucket.org/pygame/pygame
+Now try to run one of their examples.
+
+$cd gps
+$python python/gps/gps_main.py box2d_pointmass_example
+ 
+
+Optional Step 3 : For integrating Mujoco
+
+Note: Here "path_to_your_folder" means the location of your mjpro131 directory. 
+For example if it is located in /Users/myname/Documents/mjpro131 then path_to_your_folder = /Users/myname/Documents/
+
+$brew install Caskroom/cask/xquartz
+$brew install open-scene-graph
+Edit the Cmakefile.txt inside /gps_folder_path/src/3rdparty/mjcpy and mjcpy2
+
+Change line 4:
+
+include_directories(SYSTEM 
+ "${CMAKE_SOURCE_DIR}/mjpro”
+)
+
+To
+
+include_directories(SYSTEM 
+ "path_to_your_folder/mjpro131”
+)
+Change line 40:
+
+include_directories("../mjpro/include")
+To
+
+include_directories("path_to_your_folder/mjpro131/include")
+Change line 53:
+
+target_link_libraries(mjcpy "${CMAKE_SOURCE_DIR}/mjpro/libmujoco.so” ${OSG_LIBRARIES} boost_numpy)
+To
+
+target_link_libraries(mjcpy "path_to_your_folder/mjpro131/bin/libmujoco131.dylib” ${OSG_LIBRARIES} boost_numpy)
+Now one more edit in the mjcpy2.cpp file toward the licence key path.
+
+Edit line number 89:
+
+mj_activate("../mjpro/mjkey.txt")
+To
+
+mj_activate("path_to_your_folder/mjpro131/bin/mjkey.txt")
+Now, inside gps folder:
+
+cd build/
+$cmake ../src/3rdparty
+$make -j
+This should have generated a libboost_numpy.dylib and mjcpy.so inside /gps_folder_path/build/lib
+
+Now add the following two paths to your .profile or .bash_profile
+
+export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/path/to/gps/build/lib
+export DYLD_LIBRARY_PATH=$DYLD_LIBRARY_PATH:/path/to/gps/build/lib
+export PYTHONPATH=$PYTHONPATH:/path/to/gps/build/lib
+First test:
+
+Open  a python terminal and type:
+
+import mjcpy
+
+If it goes well, then you can try with one of their examples:
+
+python python/gps/gps_main.py mjc_example
+To run the second example i.e. mjc_badmm_example, you need to have Caffe installed.
+
+For installing gps with virtual environment
+
+Follow Step 1 of previous instruction set.
+
+Optional Step 2:  Integrating with box2d
+
+For installing box2d
+
+$brew install swig
+$git clone https://github.com/pybox2d/pybox2d pybox2d_dev
+$cd pybox2d_dev
+$python setup.py build 
+$sudo python setup.py install
+For installing pygame
+
+$brew install qt
+$pip install pyside
+$pip install mercurial
+$brew install sdl
+$pip install hg+https://bitbucket.org/pygame/pygame
+Congratulations: You did it:)
+
+Possible errors:
+
+1 ) Compiling with Cmake 3.5+
+
+CMake Error at /usr/local/Cellar/cmake/3.5.2/share/cmake/Modules/
+FindPythonLibs.cmake:64 (get_filename_component):
+  get_filename_component called with incorrect number of arguments
+Solution: Either downgrade it to Cmake 3.2.2 or comment out line 64 in the file
+
+/usr/local/Cellar/cmake/3.5.2/share/cmake/Modules/FindPythonLibs.cmake
+2) Segmentation 11 fault: Python quit unexpectedly.
+
+Possible cause (in my case): Clash between brew python and system python versions
+
+Solution: Set up the sym links properly, or uninstall brew python and then use system python.
+
+Possible errors when using Virtual Environment
+
+1) You installed Box2d but is facing the following error while running the box2d Example.
+
+Box2D make environment error: RAND_LIMIT_swigconstant
+Solution: You would have installed box2d via pip, I solved it by installing the latest development module pybox2d_dev as mentioned in the instructions
+
+3) If you have installed a matplotlib locally and has following error:
+
+2)
+
+You are running the mujoco example in virtual environment and face this issue:
+
+ImportError: Matplotlib qt-based backends require an external PyQt4, PyQt5,
+or
+libc++abi.dylib: terminating with uncaught exception of type NSException
+Solution: This is because you installed qt and pyqt via brew and it is not able to locate the path of the folder. So add this line to your .profile or .bash_profile
+
+export PYTHONPATH=/usr/local/lib/python2.7/site-packages:$PYTHONPATH
