@@ -1,6 +1,7 @@
 Installing gps on Mac OSX; Tested on  El-Capitan and Mavericks
 
-Versions of various dependencies the library has worked for me:
+Possible errors that could arise is given at the end of the document.
+Versions of various dependencies on which the installationw as successful:
 
 Python-2.7.10
 Box2D -2.3.1
@@ -145,6 +146,7 @@ FindPythonLibs.cmake:64 (get_filename_component):
 Solution: Either downgrade it to Cmake 3.2.2 or comment out line 64 in the file
 
 /usr/local/Cellar/cmake/3.5.2/share/cmake/Modules/FindPythonLibs.cmake
+
 2) Segmentation 11 fault: Python quit unexpectedly.
 
 Possible cause (in my case): Clash between brew python and system python versions
@@ -162,7 +164,7 @@ Solution: You would have installed box2d via pip, I solved it by installing the 
 
 2)
 
-You are running the mujoco example in virtual environment and face this issue:
+If you are running the mujoco example in a virtual environment and face this issue:
 
 ImportError: Matplotlib qt-based backends require an external PyQt4, PyQt5,
 or
