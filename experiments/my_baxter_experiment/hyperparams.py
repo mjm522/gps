@@ -55,7 +55,7 @@ if not os.path.exists(common['data_files_dir']):
 agent = {
     'type': AgentMuJoCo,
     'render' : False,
-    'filename': '/Users/michaelmathew/GoogleDrive/mjpro131/otherModels/baxter/baxter.xml', #Change 
+    'filename': EXP_DIR + '/baxter/baxter.xml', #Change 
     'x0': np.concatenate([np.zeros(19), 
                           np.zeros(19), 
                           np.array([0.82822119,-1.02534485,0.320976, np.pi/4.0, np.pi/2.0,0.0])]), #Change 
