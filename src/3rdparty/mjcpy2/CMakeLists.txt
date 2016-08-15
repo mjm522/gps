@@ -2,7 +2,7 @@ include_directories(SYSTEM "${CMAKE_SOURCE_DIR}")
 include_directories(SYSTEM "${CMAKE_SOURCE_DIR}/Boost.NumPy")
 
 include_directories(SYSTEM
-    "${CMAKE_SOURCE_DIR}/mjpro"
+    "/Users/michaelmathew/GoogleDrive/mjpro131"
 )
 # boost_python_module(mjcpy2 mjcpy2.cpp mjosgviewer.cpp)
 # target_link_libraries(mjcpy mjc boost_numpy)
@@ -37,7 +37,7 @@ endif()
 
 
 include_directories(SYSTEM ${OSG_INCLUDE_DIR})
-include_directories("../mjpro/include")
+include_directories("/Users/michaelmathew/GoogleDrive/mjpro131/include")
 message("osg includes: ${OSG_INCLUDE_DIR}")
 # add_definitions("-DOPENTHREADS_ATOMIC_USE_MUTEX")
 # add_executable(test_mujoco_osg test_mujoco_osg.cpp mujoco_osg_viewer.cpp)
@@ -50,5 +50,5 @@ boost_python_module(mjcpy mjcpy2.cpp  mujoco_osg_viewer.cpp)
 if (MJC_OLD)  # version of mujoco older than 1.31
 target_link_libraries(mjcpy "${CMAKE_SOURCE_DIR}/mjpro/libmujoco.so" ${OSG_LIBRARIES} boost_numpy)
 else()
-target_link_libraries(mjcpy "${CMAKE_SOURCE_DIR}/mjpro/bin/libmujoco131.so" ${OSG_LIBRARIES} boost_numpy)
+target_link_libraries(mjcpy "/Users/michaelmathew/GoogleDrive/mjpro131/bin/libmujoco131.dylib" ${OSG_LIBRARIES} boost_numpy)
 endif()

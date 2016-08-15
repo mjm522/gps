@@ -148,6 +148,7 @@ class GPSMain(object):
             i: Sample number.
         Returns: None
         """
+        print "condition", cond
         if self.algorithm._hyperparams['sample_on_policy'] \
                 and self.algorithm.iteration_count > 0:
             pol = self.algorithm.policy_opt.policy

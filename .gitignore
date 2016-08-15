@@ -96,3 +96,7 @@ experiments/**/data_files/
 experiments/**/log.txt
 experiments/**/*.png
 .previous_experiment
+.DS_Store
+homebrew.pth
+history.txt
+setup_qt_script.py

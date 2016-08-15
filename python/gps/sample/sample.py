@@ -32,15 +32,19 @@ class Sample(object):
     def set(self, sensor_name, sensor_data, t=None):
         """ Set trajectory data for a particular sensor. """
         if t is None:
+            #print "sensor_name", sensor_name
             self._data[sensor_name] = sensor_data
             self._X.fill(np.nan)  # Invalidate existing X.
             self._obs.fill(np.nan)  # Invalidate existing obs.
             self._meta.fill(np.nan)  # Invalidate existing meta data.
         else:
             if sensor_name not in self._data:
+                #print "here "
                 self._data[sensor_name] = \
                         np.empty((self.T,) + sensor_data.shape)
                 self._data[sensor_name].fill(np.nan)
+            #print "sensor name", sensor_name
+            #print "sensor_data", sensor_data
             self._data[sensor_name][t, :] = sensor_data
             self._X[t, :].fill(np.nan)
             self._obs[t, :].fill(np.nan)
@@ -59,6 +63,11 @@ class Sample(object):
                     continue
                 data = (self._data[data_type] if t is None
                         else self._data[data_type][t, :])
+                print self.agent.x_data_types
+                #print "data_type", data_type
+                #print "t", t
+                #print "Data", self._data
+                #print "data", data
                 self.agent.pack_data_x(X, data, data_types=[data_type])
         return X
 
